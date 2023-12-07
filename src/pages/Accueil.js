@@ -1,15 +1,19 @@
 import React from 'react';
 import Bouton from '../components/Bouton';
 // import { useAuth } from '../providers/AuthProvider';
+import ThreeDWorld from "../components/ThreeDWorld/ThreeDWorld";
+
 
 function Accueil(props) {
   // const {logout, hasLoginData} = useAuth();
 
 	return (
-    <div className="acceuil">
-      <Bouton nom="OkKo" type="lien" lien={"/okko/"}  /> 
-      <p>Bienvenue</p>      
-    </div>
+        <div className="acceuil" style={{ width: '100vw', height: '100vh' }}>
+
+            <Bouton nom="OkKo" type="lien" lien={"/okko/"}  />
+            <ThreeDWorld style={{ width: '100%', height: '100%' }}></ThreeDWorld>
+            <p>Bienvenue</p>
+        </div>
     );
 }
 

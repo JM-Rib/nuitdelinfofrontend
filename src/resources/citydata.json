@@ -1,0 +1,30 @@
+[
+  {
+    "city": "Brest",
+    "state": "",
+    "country": "France",
+    "lat": 		48.389999,
+    "lon": 	-4.490000
+  },
+  {
+    "city": "Delhi",
+    "state": "DL",
+    "country": "India",
+    "lat": 	34.088570,
+    "lon": -118.451790
+  },
+  {
+    "city": "Quito",
+    "state": "DL",
+    "country": "India",
+    "lat": 		-0.208946,
+    "lon": -78.507751
+  },
+  {
+    "city": "Kathmandu",
+    "state": "DL",
+    "country": "India",
+    "lat": 		27.700769,
+    "lon": 85.300140
+  }
+]
