@@ -11,7 +11,6 @@ import githubApi from '../api/github'; //Import the API service function
 
 const ROW_AJOUT = 1;
 function CodeOkKo(props) {
-
   const [editMode, setEditMode] = useState([]);
   
   const getOkKoApi = useApi(okKoApi.getTournois);

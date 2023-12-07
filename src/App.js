@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 import Accueil from "./pages/Accueil"
-import CodeOkKo from "./interfaceModif/CodeOkKo"
+import CodeOkKo from "./pages/CodeOkKo"
 // import { AuthProvider } from "./providers/AuthProvider";
 import ScrollToTop from "./utils/ScrollToTop";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
