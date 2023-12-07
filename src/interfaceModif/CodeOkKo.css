@@ -1,0 +1,59 @@
+.EspaceTournois {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+.EspaceTournois table{
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+} 
+.EspaceTournois .tl-th{
+  border-top-left-radius: 12px;
+} 
+.EspaceTournois .tr-th{
+  border-top-right-radius: 12px;
+} 
+
+.EspaceTournois .td-visible, .EspaceTournois .th-visible {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.EspaceTournois .tr-visible{
+  width: 100%;
+}
+.EspaceTournois .membres-form-text{
+  width: 80%;
+}
+.EspaceTournois .membres-form-age{
+  width: 40px;
+}
+  
+.EspaceTournois .tr-visible:nth-child(even) .td-visible{background-color: #f2f2f2;}
+
+.EspaceTournois .tr-visible:hover .td-visible{background-color: #ddd;}
+
+.EspaceTournois .tournois-delete-icon {
+    height: 30px;
+}
+
+.tabtournois {
+    height: 65px;
+}
+.tournois-form-annuler{
+    margin-left: 15px;
+}
+
+.EspaceTournois .th-visible {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}

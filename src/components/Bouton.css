@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "DMSans";   
+    src: local("DMSans"), url("../font/DMSans-Regular.woff2") format("woff2");
+  }
+  
+  @media (max-width: 380px) {
+    .EspaceBouton .Bouton-NavLink {
+      width: 150px;
+    }
+  }
+  @media (min-width: 380px) {
+    .EspaceBouton .Bouton-NavLink {
+      width: 250px;
+    }
+  }
+  
+  .EspaceBouton .Bouton-NavLink, .EspaceBouton button{ 
+    background: #E1E1E1;
+    border-radius: 12px;
+    box-shadow: 2px 2px 5px #333333;
+    margin: 5px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    color: black;
+    font-family: DMSans;
+      
+    text-decoration: none; /* Retire le formattage des liens */
+  }
+  
+  .EspaceBouton .Bouton-NavLink{ 
+    height: 40px;
+  
+  }
+  .EspaceBouton button{ 
+    border: 1px solid black; /*needed to override the default style for <input> */
+    width: 150px;
+    height: 40px;
+  }
