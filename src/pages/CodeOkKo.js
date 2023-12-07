@@ -1,9 +1,13 @@
 import React from 'react';
+import { Octokit } from '@octokit/core';
 import './CodeOkKo.css';
 import Bouton from '../components/Bouton';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import deleteIcon from '../delete.png'
+import {convertDateHuman, convertDateSql} from '../utils/dateConverter'
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 import useApi from '../hooks/useApi';
 import okKoApi from '../api/okKo'; //Import the API service function
@@ -12,43 +16,41 @@ import githubApi from '../api/github'; //Import the API service function
 const ROW_AJOUT = 1;
 function CodeOkKo(props) {
   const [editMode, setEditMode] = useState([]);
-  
-  const getOkKoApi = useApi(okKoApi.getTournois);
-  
+
+  const getCommitsApi = useApi(githubApi.getCommits);
+  const getCommitContentsApi = useApi(githubApi.getCommitContents);
+   
   useEffect(() => {
-    getOkKoApi.request();
+    getCommitsApi.request();
   }, []);
 
   useEffect(() => {
-    if (!getOkKoApi.loading && getOkKoApi.data) {
-      var tabEditMode = new Array(getOkKoApi.data.length + ROW_AJOUT).fill(false);
+    if (!getCommitsApi.loading && getCommitsApi.data) {
+      var tabEditMode = new Array(getCommitsApi.data.length + ROW_AJOUT).fill(false);
       setEditMode(tabEditMode);
     }
-  }, [getOkKoApi.loading, getOkKoApi.data]); 
+  }, [getCommitsApi.loading, getCommitsApi.data]); 
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const id = Number.parseInt(window.event.submitter.id);
-    const data = {
-      nomTournoi: event.target.nomTournoi.value,
-      pk_idTournoi: id,
-      fk_idSaison: event.target.idSaison.value
-    }
+    const sha = window.event.submitter.id.split('-')[0];
+    const index = window.event.submitter.id.split('-')[1];
+
     //check submit type:
-    if(window.event.submitter.name === "CREATE"){
-      createTournoi(data);
+    if(window.event.submitter.name === "GET_CONTENT"){
+      const response = await getCommitContentsApi.request(sha);
+      var tabEditMode = new Array(editMode.length).fill(false);
+      tabEditMode[index] = true;
+      setEditMode(tabEditMode);
     }else if(window.event.submitter.name === "EDIT"){
-      editTournoi(id, data);
     }
     //reset affichage du tableau apres envoi.
-    var tabEditMode = new Array(editMode.length).fill(false);
-    setEditMode(tabEditMode);
   }
 
   const createTournoi = async (data) => {
     try {
       await okKoApi.postTournoi(data);
-      getOkKoApi.request();
+      getCommitsApi.request();
     } catch (error) {
     }
   }
@@ -56,7 +58,7 @@ function CodeOkKo(props) {
   const editTournoi = async (id, data) => {
     try {
       await okKoApi.putTournoi(id, data);
-      getOkKoApi.request();
+      getCommitsApi.request();
     } catch (err) {
       console.error(err);
     }
@@ -67,7 +69,7 @@ function CodeOkKo(props) {
     if (!choice) return;
     try {
       await okKoApi.deleteTournoi(id);
-      getOkKoApi.request();
+      getCommitsApi.request();
     } catch (error) {
     }
   }
@@ -78,7 +80,7 @@ function CodeOkKo(props) {
   }
 
 	return (
-    <div className="EspaceTournois">
+    <div className="EspaceOkKo">
       <Bouton  nom="Accueil" type="lien" lien={"/index"}  />
       <br />
       <br />
@@ -86,58 +88,48 @@ function CodeOkKo(props) {
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th className='tl-th th-visible'>Nom du tournoi</th>
+              <th className='tl-th th-visible'>Nom du dev</th>
               <th className='th-visible' >Date début tournoi</th>
               <th className='th-visible' >Date fin tournoi</th>
               <th className='tr-th  th-visible' >Id Saison</th>
             </tr>
           </thead>
           <tbody>
-            {/*getOkKoApi.data?.map( (tournoi, n) => ( 
-              <tr key={"tabtournois-"+n} className="tr-visible"> 
-                <td>{ editMode[n] ?
-                  <img src={deleteIcon} className="tournois-delete-icon" alt="" onClick={() => removeTournoi(tournoi.pk_idTournoi)} />
-                  :
-                  null }
+            { getCommitsApi.data?.map( (commit, n) => ( 
+              <>
+              <tr key={"tabcommits-"+n} className="tr-visible"> 
+                <td className='td-visible'> 
+                  <div className="user-profile">
+                    <img className="avatar-developpeur" src={commit.author.avatar_url} alt=""></img>
+                    <p>{ commit.author.login } </p>
+                  </div>
+                </td> 
+                <td className='td-visible'>
+                  { commit.commit.message }</td>
+                <td className='td-visible'>
+                  { convertDateHuman(commit.commit.author.date)}
                 </td>
-                <td className='td-visible'>{ editMode[n] ? 
-                  <select name="nomTournoi" defaultValue={tournoi.nomTournoi}>
-                    <option value="CNGT" >CNGT</option>
-                    <option value="TMC" >TMC</option>
-                    <option value="Tournoi de la toussaint">Tournoi de la toussaint</option>
-                    <option value="Tournoi interne">Tournoi interne</option>
-                  </select>
-                  : tournoi.nomTournoi 
-                }</td> 
-                <td className='td-visible'>{ editMode[n] ?
-                  <> 
-                  </>
-                : 
-                  "Hello" }</td>
-                <td className='td-visible'>{ editMode[n] ?
-                  <> 
-                  </>
-                : 
-                  "Hello" }</td>
-                <td className='td-visible'>{ editMode[n] ?
-                  <> 
-                    <input type="number" id="idSaison" name="idSaison" defaultValue={tournoi.fk_idSaison}></input>
-                  </>
-                : 
-                  tournoi.fk_idSaison }</td>
-                <td>{editMode[n] ?
-                <>
-                  <input type="submit" name="EDIT" value="Envoyer" id={`${tournoi.pk_idTournoi}`}  />
-                  <button className='tournois-form-annuler' onClick={() => {annuler()}} >Annuler</button>
-                </>
-                  :
-                <div onClick={ () => {}} >
-                  <Bouton nom="Modifier" type="editMode" editMode={editMode} i={n} setEditMode={setEditMode}  ></Bouton>
-                </div>
-                }</td>
+                <td className='td-visible'>
+                  <input type="submit" name="GET_CONTENT" value="Envoyer" id={`${commit.sha}-${n}`}   />
+                </td>
               </tr>
-              ))*/}
+              {editMode[n]===true ? 
+                <tr>
+                  <td colSpan='4'>
+                  {getCommitContentsApi.loading === false ? (
+                    getCommitContentsApi.data.files.map( (fichier, i) => (
+                      <p>{fichier.filename}</p>
+                    ))
+                  ) : (
+                    "Chargement..."
+                  )}
+                  </td>
+                </tr>
+              :
+                null
+              }
+              </>
+              )) }
               { editMode[editMode.length-ROW_AJOUT] ?
                 <tr key={"tabtournois-"+editMode.length-ROW_AJOUT} className="tr-visible"> 
                   <td>

@@ -9,6 +9,7 @@ export default (apiFunc) => {
     setLoading(true);
     try {
       const response = await apiFunc(...args);
+      // if (process.env.NODE_ENV === 'development') {  console.log(response); }
       if (response?.status !== 200) {
         throw response;
       } else {

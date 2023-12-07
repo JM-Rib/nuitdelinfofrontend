@@ -1,20 +1,23 @@
-import client from "./client";
+import client from "./outboundClient";
 // import { getToken } from '../utils/token';
 
-const getOkKos = () => client.get("/tournoi");
+const getCommits = async () => await client.request("GET /repos/{owner}/{repo}/commits", 
+{ owner: 'JM-Rib',
+  repo: 'nuitdelinfofrontend',
+  headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+  } 
+});
 
-const getOkKo = (i) => client.get("/tournoi/"+i);
-
-const postOkKo = (data) => client.post("/tournoi/", data);
-
-const putOkKo = (id, data) => client.put(`/tournoi/${id}`, data);
-
-const deleteOkKo = (id) => client.delete(`/tournoi/${id}`);
+const getCommitContents = async (ref) => await client.request("GET /repos/{owner}/{repo}/commits/{ref}",
+  {
+    owner: 'JM-Rib',
+    repo: 'nuitdelinfofrontend',
+    ref: ref,
+    headers: { 'X-GitHub-Api-Version': '2022-11-28'} 
+  });
 
 export default {
-  getOkKo,
-  getOkKo,
-  postOkKo,
-  putOkKo,
-  deleteOkKo
+  getCommits,
+  getCommitContents
 };
