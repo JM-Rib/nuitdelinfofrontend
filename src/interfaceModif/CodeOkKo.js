@@ -7,17 +7,13 @@ import deleteIcon from '../delete.png'
 
 import useApi from '../hooks/useApi';
 import okKoApi from '../api/okKo'; //Import the API service function
+import githubApi from '../api/github'; //Import the API service function
 
 const ROW_AJOUT = 1;
 function CodeOkKo(props) {
-  const { denyVisitor } = useAuth();
-  denyVisitor();
 
   const [editMode, setEditMode] = useState([]);
   
-  const [dateDebutTournoi, setDateDebutTournoi] = useState(new Date());
-  const [dateFinTournoi, setDateFinTournoi] = useState(new Date());
-
   const getOkKoApi = useApi(okKoApi.getTournois);
   
   useEffect(() => {
@@ -99,7 +95,7 @@ function CodeOkKo(props) {
             </tr>
           </thead>
           <tbody>
-            {getOkKoApi.data?.map( (tournoi, n) => ( 
+            {/*getOkKoApi.data?.map( (tournoi, n) => ( 
               <tr key={"tabtournois-"+n} className="tr-visible"> 
                 <td>{ editMode[n] ?
                   <img src={deleteIcon} className="tournois-delete-icon" alt="" onClick={() => removeTournoi(tournoi.pk_idTournoi)} />
@@ -137,12 +133,12 @@ function CodeOkKo(props) {
                   <button className='tournois-form-annuler' onClick={() => {annuler()}} >Annuler</button>
                 </>
                   :
-                <div onClick={ () => {setDateDebutTournoi(new Date(tournoi.dateDebutTournoi)); setDateFinTournoi(new Date(tournoi.dateFinTournoi))}} >
+                <div onClick={ () => {}} >
                   <Bouton nom="Modifier" type="editMode" editMode={editMode} i={n} setEditMode={setEditMode}  ></Bouton>
                 </div>
                 }</td>
               </tr>
-            ))}
+              ))*/}
               { editMode[editMode.length-ROW_AJOUT] ?
                 <tr key={"tabtournois-"+editMode.length-ROW_AJOUT} className="tr-visible"> 
                   <td>
@@ -180,7 +176,7 @@ function CodeOkKo(props) {
                 <tr>
                   <td></td>
                   <td>
-                    <div onClick={ () => {setDateDebutTournoi(new Date(Date.now())); setDateFinTournoi(new Date(Date.now()));}} >
+                    <div onClick={ () => {}} >
                       <Bouton nom="Ajouter" type="editMode" editMode={editMode} i={editMode.length-ROW_AJOUT} setEditMode={setEditMode} ></Bouton>
                     </div>
                   </td>
