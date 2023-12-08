@@ -1,4 +1,4 @@
-import client from "./outboundClient";
+import client from "./githubClient";
 // import { getToken } from '../utils/token';
 
 const getCommits = async () => await client.request("GET /repos/{owner}/{repo}/commits", 
