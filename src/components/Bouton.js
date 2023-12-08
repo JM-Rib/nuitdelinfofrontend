@@ -13,7 +13,7 @@ function Bouton(props, {callbackvalue, callback}) {
     								to={props.lien}
     								exact="true"
 								>
-									{props.nom}
+									<i className="pi pi-github"></i>{props.nom}
 								</NavLink>
 					: null }
 
