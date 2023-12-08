@@ -7,9 +7,9 @@
     "lon": 	-4.490000
   },
   {
-    "city": "Delhi",
-    "state": "DL",
-    "country": "India",
+    "city": "Los angeles",
+    "state": "California",
+    "country": "US",
     "lat": 	34.088570,
     "lon": -118.451790
   },
@@ -21,10 +21,143 @@
     "lon": -78.507751
   },
   {
-    "city": "Kathmandu",
+    "city": "Tokyo",
+    "state": "",
+    "country": "Japan",
+    "lat": 35.6895,
+    "lon": 139.6917
+  },
+  {
+    "city": "Delhi",
     "state": "DL",
     "country": "India",
-    "lat": 		27.700769,
-    "lon": 85.300140
+    "lat": 28.6139,
+    "lon": 77.2090
+  },
+  {
+    "city": "Shanghai",
+    "state": "",
+    "country": "China",
+    "lat": 31.2304,
+    "lon": 121.4737
+  },
+  {
+    "city": "Sao Paulo",
+    "state": "SP",
+    "country": "Brazil",
+    "lat": -23.5505,
+    "lon": -46.6333
+  },
+  {
+    "city": "Mumbai",
+    "state": "MH",
+    "country": "India",
+    "lat": 19.0760,
+    "lon": 72.8777
+  },
+  {
+    "city": "Istanbul",
+    "state": "",
+    "country": "Turkey",
+    "lat": 41.0082,
+    "lon": 28.9784
+  },
+  {
+    "city": "Lahore",
+    "state": "PB",
+    "country": "Pakistan",
+    "lat": 31.5204,
+    "lon": 74.3587
+  },
+  {
+    "city": "Kinshasa",
+    "state": "",
+    "country": "DR Congo",
+    "lat": -4.4419,
+    "lon": 15.2663
+  },
+  {
+    "city": "Seoul",
+    "state": "",
+    "country": "South Korea",
+    "lat": 37.5665,
+    "lon": 126.9780
+  },
+  {
+    "city": "Jakarta",
+    "state": "",
+    "country": "Indonesia",
+    "lat": -6.2088,
+    "lon": 106.8456
+  },
+  {
+    "city": "Karachi",
+    "state": "SD",
+    "country": "Pakistan",
+    "lat": 24.8607,
+    "lon": 67.0011
+  },
+  {
+    "city": "Cairo",
+    "state": "",
+    "country": "Egypt",
+    "lat": 30.0444,
+    "lon": 31.2357
+  },
+  {
+    "city": "Mexico City",
+    "state": "CMX",
+    "country": "Mexico",
+    "lat": 19.4326,
+    "lon": -99.1332
+  },
+  {
+    "city": "Lima",
+    "state": "",
+    "country": "Peru",
+    "lat": -12.0464,
+    "lon": -77.0428
+  },
+  {
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "lat": 40.7128,
+    "lon": -74.0060
+  },
+  {
+    "city": "London",
+    "state": "",
+    "country": "United Kingdom",
+    "lat": 51.5099,
+    "lon": -0.1180
+  },
+  {
+    "city": "Bangkok",
+    "state": "",
+    "country": "Thailand",
+    "lat": 13.7563,
+    "lon": 100.5018
+  },
+  {
+    "city": "Beijing",
+    "state": "",
+    "country": "China",
+    "lat": 39.9042,
+    "lon": 116.4074
+  },
+  {
+    "city": "Lagos",
+    "state": "",
+    "country": "Nigeria",
+    "lat": 6.5244,
+    "lon": 3.3792
+  },
+  {
+    "city": "Bogota",
+    "state": "DC",
+    "country": "Colombia",
+    "lat": 4.7110,
+    "lon": -74.0721
   }
 ]

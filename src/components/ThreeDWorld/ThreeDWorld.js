@@ -1,12 +1,16 @@
 // ThreeDWorld.js
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Html, PerspectiveCamera, Sphere, useTexture} from '@react-three/drei';
 import {Canvas, useFrame, useThree} from 'react-three-fiber';
 import * as THREE from 'three';
 import cityData from '../../resources/citydata.json';
 import { gsap } from 'gsap';
 
-const EarthModel = ({ onClick }) => {
+import KeyPoint from "./KeyPoint/KeyPoint";
+import InfoPanel from "./InfoPanel/InfoPanel";
+import {Vector3} from "three";
+
+const EarthModel = ({ onClick, onShowInfoPanel }) => {
     const groupRef = useRef();
     const earthRef = useRef();
     const cloudRef = useRef();
@@ -15,35 +19,25 @@ const EarthModel = ({ onClick }) => {
     const specularMap = useTexture('/img/earth_spec.jpg');
     const cloudTexture = useTexture('/img/earth_cloud.jpg'); // Charger la texture des nuages
     const { camera } = useThree();
+    const [startZoomAnimation, setStartZoomAnimation] = useState([0,0,0]);
+
+
 
     let isDragging = false;
     let previousMousePosition = new THREE.Vector2();
 
-    function placeButtonAtLatLng(latitude, longitude) {
-        // Inverser la longitude
-        longitude = longitude * -1;
-
-        // Convertir la latitude et la longitude en radians
-        const latRad = (latitude * Math.PI) / 180;
-        const lonRad = (longitude * Math.PI) / 180;
-
-        // Convertir les coordonnées sphériques en coordonnées cartésiennes
-        const x = Math.cos(lonRad) * Math.cos(latRad);
-        const y = Math.sin(latRad);
-        const z = Math.sin(lonRad) * Math.cos(latRad);
-
-        return (
-            <mesh position={[x, y, z]}>
-                <boxGeometry args={[0.1, 0.1, 0.1]} />
-                <meshPhongMaterial color={0x00ff00} />
-            </mesh>
-        );
-    };
 
     useEffect(() => {
         const handleMouseDown = () => {
             isDragging = true;
             document.body.style.cursor = "grab";
+            const buttons = document.getElementsByClassName("EspaceBouton");
+            for(const button of Array.from(buttons)){
+                if(button instanceof HTMLButtonElement){
+                    button.style.pointerEvents = "none";
+                }
+
+            }
         };
 
         const handleMouseUp = () => {
@@ -66,6 +60,7 @@ const EarthModel = ({ onClick }) => {
                 }
             });*/
         };
+
 
         const handleMouseMove = (event) => {
             if (isDragging) {
@@ -99,6 +94,11 @@ const EarthModel = ({ onClick }) => {
         };
     }, []);
 
+    const handleZoomAnimation = (x,y,z) => {
+        setStartZoomAnimation(true);
+
+    };
+
     useFrame(() => {
         camera.position.z = 2;
         if (earthRef.current) {
@@ -113,7 +113,7 @@ const EarthModel = ({ onClick }) => {
         <group ref={groupRef} onClick={onClick}>
             <Sphere args={[1, 32, 32]} ref={earthRef} >
                 <meshPhongMaterial map={texture} bumpMap={bumpMap} bumpScale={1.5} specularMap={specularMap} />
-                {cityData.map(city => placeButtonAtLatLng(city.lat, city.lon))}
+                {cityData.map(city => <KeyPoint key={city.city} latitude={city.lat} longitude={city.lon} city={city.city} onShowInfoPanel={onShowInfoPanel} startZoomAnimation={(x, y, z) => handleZoomAnimation(x, y, z)} />)}
             </Sphere>
             <Sphere args={[1.01, 32, 32]} ref={cloudRef}> {/* Ajouter une deuxième sphère pour les nuages */}
                 <meshPhongMaterial map={cloudTexture} side={'double'} opacity={0.4} transparent={true} depthWrite={false} />
@@ -123,13 +123,26 @@ const EarthModel = ({ onClick }) => {
 };
 
 const ThreeDWorld = () => {
+    const [showInfoPanel, setShowInfoPanel] = useState(false);
+    const [cityStats, setCityStats] = useState(null);
+    const handleShowInfoPanel = (city) => {
+        setShowInfoPanel(false);
+        setShowInfoPanel(true);
+        setCityStats(city);
+        console.log(city);
+    };
+
     return (
-        <Canvas>
-            <PerspectiveCamera position={[0, 0, 1]} />
-            <ambientLight intensity={3.0} /> {/* Augmentation de l'intensité de la lumière ambiante */}
-            <pointLight position={[10, 10, 10]} />
-            <EarthModel />
-        </Canvas>
+        <div style={{height: "100%"}}>
+            <Canvas>
+                <PerspectiveCamera position={[0, 0, 1]} />
+                <ambientLight intensity={3.0} /> {/* Augmentation de l'intensité de la lumière ambiante */}
+                <pointLight position={[10, 10, 10]} />
+                <EarthModel onShowInfoPanel={(city) => handleShowInfoPanel(city)} />
+            </Canvas>
+            {showInfoPanel && <InfoPanel city={cityStats} />}
+        </div>
+
     );
 };
 
