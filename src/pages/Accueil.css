@@ -1,0 +1,5 @@
+.acceuil{
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #03045e, #020024);
+}

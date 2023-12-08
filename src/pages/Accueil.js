@@ -2,6 +2,7 @@ import React from 'react';
 import Bouton from '../components/Bouton';
 // import { useAuth } from '../providers/AuthProvider';
 import ThreeDWorld from "../components/ThreeDWorld/ThreeDWorld";
+import './Accueil.css';
 
 
 function Accueil(props) {

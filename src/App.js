@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import 'primereact/resources/themes/saga-blue/theme.css'; // Change the theme as needed
 import 'primereact/resources/primereact.min.css';
-
+import "primeicons/primeicons.css";
 
 import Accueil from "./pages/Accueil"
 import CodeOkKo from "./pages/CodeOkKo"
