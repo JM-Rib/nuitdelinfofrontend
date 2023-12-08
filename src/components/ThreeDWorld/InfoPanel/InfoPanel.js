@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Button} from "primereact/button";
+import {TabPanel, TabView} from "primereact/tabview";
+import { Chart } from 'primereact/chart';
+import './InfoPanel.css'
 
 const InfoPanel = ({ city }) => {
     const [cityName, setCityName] = useState(null);
 
     useEffect(() => {
         if (city && city.city) {
-            console.log(city.iaqi);
+            console.log(city.time.iso);
             setCityName(city);
         }
     }, [city]);
@@ -45,16 +48,44 @@ const InfoPanel = ({ city }) => {
     };
 
     return (
-        <div style={{position: 'absolute', right: 0, top: 0, width: '500px', height: '100%', background: 'white', padding: '20px'}}>
+        <div style={{position: 'absolute', right: 0, top: 0, width: '500px', height: '100%', background: 'white', padding: '20px', overflow: 'auto'}}>
             <h2>Information</h2>
             {cityName && cityName.city && (
                 <div>
                     <h3>{cityName.city.name}</h3>
+                    <h4>Dernière mise à jour : {new Date(cityName.time.iso).toLocaleString()}</h4>
                     <DataTable value={iaqiArray}>
                         <Column body={infoColumnBodyTemplate}></Column>
                         <Column field="key" header="Type données"></Column>
                         <Column field="value" header="Valeur de la donnée"></Column>
                     </DataTable>
+
+                    <h4>Prevision des données de polution</h4>
+
+                    <TabView scrollable>
+                        {Object.keys(cityName.forecast.daily).map((key) => {
+                            const forecastData = cityName.forecast.daily[key];
+
+                            // Créer des données de graphique
+                            const chartData = {
+                                labels: forecastData.map(data => data.day),
+                                datasets: [
+                                    {
+                                        label: keyMapping[key] ? keyMapping[key].name : key,
+                                        data: forecastData.map(data => data.avg),
+                                        fill: false,
+                                        borderColor: '#4bc0c0'
+                                    }
+                                ]
+                            };
+
+                            return (
+                                <TabPanel key={key} header={keyMapping[key] ? keyMapping[key].name : key}>
+                                    <Chart type="line" data={chartData} />
+                                </TabPanel>
+                            );
+                        })}
+                    </TabView>
                 </div>
             )}
         </div>

@@ -41,7 +41,7 @@ const KeyPoint = ({ latitude, longitude, city, onShowInfoPanel, startZoomAnimati
         const aqiMax = 431;
 
         // Définir la plage de tailles de sphère correspondante (par exemple, de 0.01 à 0.5)
-        const sizeMin = 0.01;
+        const sizeMin = 0.02;
         const sizeMax = 0.1;
 
         // Calculer la taille de la sphère en utilisant une interpolation linéaire
@@ -49,6 +49,24 @@ const KeyPoint = ({ latitude, longitude, city, onShowInfoPanel, startZoomAnimati
 
         // Retourner la taille calculée
         return size;
+    };
+
+    const calculateSphereColor = (aqi) => {
+        // Plages d'indices AQI
+        const aqiRanges = [
+            { min: 0, max: 50, color: 0x00ff00 },   // Bon (vert clair)
+            { min: 51, max: 100, color: 0x99ff99 }, // Acceptable/Moyen (vert moins clair)
+            { min: 101, max: 250, color: 0xffff66 },// Mauvais pour la santé des groupes sensibles (jaune)
+            { min: 251, max: 350, color: 0xff9966 },// Mauvais (orange)
+            { min: 351, max: 430, color: 0xff3300 },// Très mauvais (rouge)
+            { min: 431, max: Infinity, color: 0x990000 } // Dangereux (rouge foncé)
+        ];
+
+        // Trouver la plage à laquelle l'indice AQI appartient
+        const range = aqiRanges.find(({ min, max }) => aqi >= min && aqi <= max);
+
+        // Retourner la couleur associée à la plage
+        return range ? range.color : 0xffffff; // Blanc par défaut si aucune plage ne correspond
     };
 
     // Ajouter une vérification pour s'assurer que stats n'est pas null avant d'accéder à ses propriétés
@@ -69,7 +87,7 @@ const KeyPoint = ({ latitude, longitude, city, onShowInfoPanel, startZoomAnimati
         <>
             <mesh position={[x, y, z]}>
                 <Sphere onClick={triggerAnimation} args={[calculateSphereSize(stats.aqi), 32, 32]}>
-                    <meshPhongMaterial color={0x00ff00} />
+                    <meshPhongMaterial color={calculateSphereColor(stats.aqi)} />
                 </Sphere>
             </mesh>
         </>
