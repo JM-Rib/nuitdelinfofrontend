@@ -6,8 +6,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import deleteIcon from '../delete.png'
 import {convertDateHuman, convertDateSql} from '../utils/dateConverter'
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+
+import { Panel } from 'primereact/panel';
 
 import useApi from '../hooks/useApi';
 import okKoApi from '../api/okKo'; //Import the API service function
@@ -39,6 +39,7 @@ function CodeOkKo(props) {
     //check submit type:
     if(window.event.submitter.name === "GET_CONTENT"){
       const response = await getCommitContentsApi.request(sha);
+      console.log(getCommitContentsApi.data);
       var tabEditMode = new Array(editMode.length).fill(false);
       tabEditMode[index] = true;
       setEditMode(tabEditMode);
@@ -85,13 +86,17 @@ function CodeOkKo(props) {
       <br />
       <br />
       <form onSubmit={handleSubmit}>
+        <select name="nomTournoi" defaultValue={""}>
+            <option value="JM-Rib" >JM-Rib</option>
+            <option value="BastienTLC" >BastienTLC</option>
+        </select>
         <table>
           <thead>
             <tr>
               <th className='tl-th th-visible'>Nom du dev</th>
-              <th className='th-visible' >Date début tournoi</th>
-              <th className='th-visible' >Date fin tournoi</th>
-              <th className='tr-th  th-visible' >Id Saison</th>
+              <th className='th-visible' >Message de la contribution</th>
+              <th className='th-visible' >Date et Heure </th>
+              <th className='tr-th  th-visible' ></th>
             </tr>
           </thead>
           <tbody>
@@ -110,7 +115,7 @@ function CodeOkKo(props) {
                   { convertDateHuman(commit.commit.author.date)}
                 </td>
                 <td className='td-visible'>
-                  <input type="submit" name="GET_CONTENT" value="Envoyer" id={`${commit.sha}-${n}`}   />
+                  <input type="submit" name="GET_CONTENT" value="Plus d'infos..." id={`${commit.sha}-${n}`}   />
                 </td>
               </tr>
               {editMode[n]===true ? 
@@ -118,7 +123,20 @@ function CodeOkKo(props) {
                   <td colSpan='4'>
                   {getCommitContentsApi.loading === false ? (
                     getCommitContentsApi.data.files.map( (fichier, i) => (
-                      <p>{fichier.filename}</p>
+                      fichier.status==="modified" ?
+                        <Panel header={fichier.filename + " ...  Modifié"} collapsed={true} toggleable >
+                          <p className="m-0">
+                            {fichier.patch?.split("\n").map( (ligne, j) => (
+                              <>
+                                <br />
+                                {ligne}
+                              </>
+                            ))}
+                          </p>
+                        </Panel> 
+                      :
+                        <Panel header={fichier.filename + " ... Ajouté"} className="panel-ajout" collapsed={true} >
+                        </Panel> 
                     ))
                   ) : (
                     "Chargement..."
@@ -130,49 +148,6 @@ function CodeOkKo(props) {
               }
               </>
               )) }
-              { editMode[editMode.length-ROW_AJOUT] ?
-                <tr key={"tabtournois-"+editMode.length-ROW_AJOUT} className="tr-visible"> 
-                  <td>
-                  </td>
-                  <td className='td-visible'>
-                    <select name="nomTournoi" defaultValue={""}>
-                      <option value="CNGT" >CNGT</option>
-                      <option value="TMC" >TMC</option>
-                      <option value="Tournoi de la toussaint">Tournoi de la toussaint</option>
-                      <option value="Tournoi interne">Tournoi interne</option>
-                    </select>
-                  </td> 
-                  <td className='td-visible'>
-                    <> 
-                    </>
-                  </td>
-                  <td className='td-visible'>
-                    <> 
-                    </>
-                  </td>
-                  <td className='td-visible'>
-                    <> 
-                      <input type="number" id="idSaison" name="idSaison" defaultValue={""}></input>
-                    </>
-                  </td>
-                  <td>
-                    <>
-                      <input type="submit" name="CREATE" idbutton={editMode.length-ROW_AJOUT} value="Envoyer"  />
-                      {/* <button className='tournois-form-envoyer' onClick={(e) => {createTournoi(e)}} >Envoyer</button> */}
-                      <button className='tournois-form-annuler' onClick={() => {annuler()}} >Annuler</button>
-                    </>
-                  </td>
-                </tr>
-                :
-                <tr>
-                  <td></td>
-                  <td>
-                    <div onClick={ () => {}} >
-                      <Bouton nom="Ajouter" type="editMode" editMode={editMode} i={editMode.length-ROW_AJOUT} setEditMode={setEditMode} ></Bouton>
-                    </div>
-                  </td>
-                </tr>
-              }
           </tbody>
         </table>
       </form>
