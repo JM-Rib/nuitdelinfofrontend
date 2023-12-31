@@ -24,8 +24,6 @@ const KeyPoint = ({ latitude, longitude, city, onShowInfoPanel, startZoomAnimati
         const fetchData = async () => {
             try {
                 const response = await axios.get(`https://api.waqi.info/feed/${city}/?token=b15da9103f34c639c13c8dc552c87c934c8bfc24`);
-                console.log(city)
-                console.log(response.data.data);
                 setStats(response.data.data);
             } catch (error) {
                 console.error("Erreur lors de la récupération des données de l'API WAQI :", error);
@@ -87,7 +85,7 @@ const KeyPoint = ({ latitude, longitude, city, onShowInfoPanel, startZoomAnimati
         <>
             <mesh position={[x, y, z]}>
                 <Sphere onClick={triggerAnimation} args={[calculateSphereSize(stats.aqi), 32, 32]}>
-                    <meshPhongMaterial color={calculateSphereColor(stats.aqi)} />
+                    <meshBasicMaterial color={calculateSphereColor(stats.aqi)} />
                 </Sphere>
             </mesh>
         </>

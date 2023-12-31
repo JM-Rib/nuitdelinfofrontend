@@ -1,122 +1,51 @@
 // ThreeDWorld.js
 import React, {useEffect, useRef, useState} from 'react';
-import {Html, PerspectiveCamera, Sphere, useTexture} from '@react-three/drei';
-import {Canvas, useFrame, useThree} from 'react-three-fiber';
-import * as THREE from 'three';
+import {Environment, OrbitControls, PerspectiveCamera, Sphere, useTexture} from '@react-three/drei';
+import {Canvas, useThree} from 'react-three-fiber';
+
+
 import cityData from '../../resources/citydata.json';
-import { gsap } from 'gsap';
+
 
 import KeyPoint from "./KeyPoint/KeyPoint";
 import InfoPanel from "./InfoPanel/InfoPanel";
-import {Vector3} from "three";
+import {useControls} from "leva";
+
 
 const EarthModel = ({ onClick, onShowInfoPanel }) => {
     const groupRef = useRef();
     const earthRef = useRef();
-    const cloudRef = useRef();
-    const texture = useTexture('/img/earth_map2.jpg');
-    const bumpMap = useTexture('/img/bump_map.jpg');
+    const { gl } = useThree()
+    const texture = useTexture('/img/earth_map3.jpg');
+    const displacementMap = useTexture('/img/bump_map2.jpg');
     const specularMap = useTexture('/img/earth_spec.jpg');
-    const cloudTexture = useTexture('/img/earth_cloud.jpg'); // Charger la texture des nuages
     const { camera } = useThree();
     const [startZoomAnimation, setStartZoomAnimation] = useState([0,0,0]);
 
 
 
-    let isDragging = false;
-    let previousMousePosition = new THREE.Vector2();
-
-
     useEffect(() => {
-        const handleMouseDown = () => {
-            isDragging = true;
-            document.body.style.cursor = "grab";
-            const buttons = document.getElementsByClassName("EspaceBouton");
-            for(const button of Array.from(buttons)){
-                if(button instanceof HTMLButtonElement){
-                    button.style.pointerEvents = "none";
-                }
-
-            }
-        };
-
-        const handleMouseUp = () => {
-            isDragging = false;
-            document.body.style.cursor = "default";
-
-            const currentRotation = groupRef.current.rotation;
-
-           /* const timeline = gsap.timeline();
-            timeline.to(currentRotation, {
-                duration: 3,
-                x: 0,
-                y: 0,
-                z: 0,
-                ease: "elastic.out(1,0.5)",
-                onUpdate: () => {
-                    if (isDragging) {
-                        timeline.pause();
-                    }
-                }
-            });*/
-        };
-
-
-        const handleMouseMove = (event) => {
-            if (isDragging) {
-                let deltaMove = new THREE.Vector2(
-                    event.offsetX - previousMousePosition.x,
-                    event.offsetY - previousMousePosition.y
-                );
-
-                let deltaRotationQuaternion = new THREE.Quaternion()
-                    .setFromEuler(new THREE.Euler(
-                        0,
-                        (deltaMove.x / 8 * 1) * (Math.PI / 180),
-                        -(deltaMove.y / 8 * 1) * (Math.PI / 180),
-                        'XYZ'
-                    ));
-
-                groupRef.current.quaternion.multiplyQuaternions(deltaRotationQuaternion, groupRef.current.quaternion);
-            }
-
-            previousMousePosition.set(event.offsetX, event.offsetY);
-        };
-
-        window.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mouseup', handleMouseUp);
-        window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-            window.removeEventListener('mousedown', handleMouseDown);
-            window.removeEventListener('mouseup', handleMouseUp);
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+        texture.anisotropy = gl.capabilities.getMaxAnisotropy()
+    }, [texture, gl])
 
     const handleZoomAnimation = (x,y,z) => {
         setStartZoomAnimation(true);
+        console.log("camera postion : ", camera.position);
+        console.log("coordonnées : ", x,y,z);
+
 
     };
 
-    useFrame(() => {
-        camera.position.z = 2;
-        if (earthRef.current) {
-            earthRef.current.rotation.y += 0.001; // Appliquer une rotation à la sphère de la terre
-        }
-        if (cloudRef.current) {
-            cloudRef.current.rotation.y += 0.0015; // Appliquer une rotation à la sphère des nuages
-        }
-    });
 
     return (
         <group ref={groupRef} onClick={onClick}>
-            <Sphere args={[1, 32, 32]} ref={earthRef} >
-                <meshPhongMaterial map={texture} bumpMap={bumpMap} bumpScale={1.5} specularMap={specularMap} />
+            <Sphere args={[1, 1024, 1024]} ref={earthRef} castShadow={true} receiveShadow={true} >
+                <meshStandardMaterial
+                    map={texture}
+                    displacementMap={displacementMap}
+                    displacementScale={0.02}
+                />
                 {cityData.map(city => <KeyPoint key={city.city} latitude={city.lat} longitude={city.lon} city={city.city} onShowInfoPanel={onShowInfoPanel} startZoomAnimation={(x, y, z) => handleZoomAnimation(x, y, z)} />)}
-            </Sphere>
-            <Sphere args={[1.01, 32, 32]} ref={cloudRef}> {/* Ajouter une deuxième sphère pour les nuages */}
-                <meshPhongMaterial map={cloudTexture} side={'double'} opacity={0.4} transparent={true} depthWrite={false} />
             </Sphere>
         </group>
     );
@@ -134,11 +63,37 @@ const ThreeDWorld = () => {
 
     return (
         <div style={{height: "100%"}}>
-            <Canvas>
+            <Canvas shadows camera={{ position: [0, 0, 1.75] }}>
                 <PerspectiveCamera position={[0, 0, 1]} />
-                <ambientLight intensity={3.0} /> {/* Augmentation de l'intensité de la lumière ambiante */}
-                <pointLight position={[10, 10, 10]} />
+                <Environment files="/img/venice_sunset_1k.hdr" />
+                <directionalLight
+                    intensity={2}
+                    position={[4, 0, 2]}
+                    castShadow={true}
+                    shadow-mapSize-width={2048}
+                    shadow-mapSize-height={2048}
+                    shadow-camera-left={-2}
+                    shadow-camera-right={2}
+                    shadow-camera-top={-2}
+                    shadow-camera-bottom={2}
+                    shadow-camera-near={0.1}
+                    shadow-camera-far={7}
+                />
+                <directionalLight
+                    intensity={2}
+                    position={[3, 0, 3]}
+                    castShadow={true}
+                    shadow-mapSize-width={2048}
+                    shadow-mapSize-height={2048}
+                    shadow-camera-left={-2}
+                    shadow-camera-right={2}
+                    shadow-camera-top={-2}
+                    shadow-camera-bottom={2}
+                    shadow-camera-near={0.1}
+                    shadow-camera-far={7}
+                />
                 <EarthModel onShowInfoPanel={(city) => handleShowInfoPanel(city)} />
+                <OrbitControls />
             </Canvas>
             {showInfoPanel && <InfoPanel city={cityStats} />}
         </div>

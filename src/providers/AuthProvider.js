@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { storeToken, removeToken, getToken } from '../utils/token';
 import { useNavigate } from 'react-router-dom';
 import useApi from '../hooks/useApi';
