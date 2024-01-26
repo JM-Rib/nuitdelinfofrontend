@@ -1,67 +1,79 @@
-# Getting Started with Create React App
+<p align="center">
+  <img src="screenshot.png" alt="Capture d'écran de l'application"  height="300"/>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MasterJS: Globe 3D avec niveaux de pollution quotidiens
 
-## Available Scripts
+[Accès à l'application ici](http://bastientlc.freeboxos.fr:3000)
 
-In the project directory, you can run:
+## Introduction
 
-### `npm start`
+Cette application web propose une expérience interactive permettant de visualiser en 3D un globe terrestre tout en affichant des niveaux de pollution provenant de diverses unités de mesure. Les données de pollution incluent des paramètres tels que le monoxyde de carbone, la pression atmosphérique, la température, et bien d'autres.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Données de Pollution
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Les données de pollution suivantes sont utilisées pour afficher les niveaux de pollution de différentes villes sur le globe :
 
-### `npm test`
+### Monoxyde de Carbone
+- Type de données : ppm (parties par million)
+- Description : Concentration en parties par million (ppm) de monoxyde de carbone (CO) dans l'air. Mesure la quantité de CO, un gaz toxique, présent dans l'atmosphère.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Dew (Rosée)
+- Type de données : °C
+- Description : Température de rosée (Dew) en degrés Celsius. Indique la température à laquelle l'air doit être refroidi pour atteindre la saturation et provoquer la condensation de la rosée.
 
-### `npm run build`
+### Humidité
+- Type de données : Pourcentage (%)
+- Description : Pourcentage d'humidité dans l'air. Mesure la quantité d'eau vaporisée présente dans l'atmosphère par rapport à la quantité maximale possible.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Dioxyde d'Azote
+- Type de données : ppb (parties par milliard)
+- Description : Concentration en parties par milliard (ppb) de dioxyde d'azote (NO2) dans l'air. Indique la présence de ce polluant atmosphérique, souvent émis par les véhicules et les processus industriels.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Ozone
+- Type de données : ppb (parties par milliard)
+- Description : Concentration en parties par milliard (ppb) d'ozone (O3) dans l'air. Mesure la quantité d'ozone, un gaz souvent présent dans la haute atmosphère, mais considéré comme polluant à des concentrations élevées au niveau du sol.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Pression Atmosphérique
+- Type de données : hPa (hectopascal)
+- Description : Pression atmosphérique en hectopascals (hPa). Indique la force exercée par l'atmosphère sur une unité de surface et est souvent utilisée pour prédire les conditions météorologiques.
 
-### `npm run eject`
+### Particules < 10µm
+- Type de données : µg/m³ (microgrammes par mètre cube)
+- Description : Concentration en microgrammes par mètre cube (µg/m³) de particules fines de moins de 10 micromètres dans l'air. Mesure la présence de particules susceptibles d'affecter la qualité de l'air et la santé respiratoire.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Particules < 2.5µm
+- Type de données : µg/m³ (microgrammes par mètre cube)
+- Description : Concentration en microgrammes par mètre cube (µg/m³) de particules fines de moins de 2.5 micromètres dans l'air. Similaire au critère précédent, mais avec une taille de particules plus petite.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### r (Rayon)
+- Type de données : Aucune unité spécifiée
+- Description : Rayon (r) sans unité spécifiée. Peut représenter une valeur utilisée dans le contexte de la modélisation ou des calculs spécifiques.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Dioxyde de Soufre
+- Type de données : ppb (parties par milliard)
+- Description : Concentration en parties par milliard (ppb) de dioxyde de soufre (SO2) dans l'air. Indique la présence de ce polluant souvent émis par les processus industriels.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Température
+- Type de données : °C
+- Description : Température en degrés Celsius. Mesure la chaleur de l'air, influençant les conditions météorologiques et le confort thermique.
 
-## Learn More
+### Vitesse du Vent
+- Type de données : m/s (mètres par seconde)
+- Description : Vitesse du vent en mètres par seconde. Indique la rapidité du déplacement de l'air à une localisation donnée.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### wd (Direction du Vent)
+- Type de données : Degrés
+- Description : Direction du vent en degrés. Indique la direction vers laquelle le vent souffle.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### wg (Vitesse du Vent Rafale)
+- Type de données : m/s (mètres par seconde)
+- Description : Vitesse du vent en rafales, mesurée en mètres par seconde. Indique la rapidité maximale du vent sur une période donnée.
 
-### Code Splitting
+## Conclusion
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Cette application offre une représentation visuelle et interactive des niveaux de pollution à travers le globe, facilitant la compréhension de l'impact de divers facteurs environnementaux.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
